@@ -1,0 +1,28 @@
+specVersion: 0.2.0
+name: testnet-subql-deip
+version: 0.0.4
+description: This project can be use as a starting po...
+repository: https://github.com/octopus-appchains/testnet-subql-deip.git
+schema:
+  file: ./schema.graphql
+network:
+  endpoint: >-
+    wss://gateway.testnet.octopus.network/deip/46v4p8ss613olf92p2scmsjud68mhzrr
+  genesisHash: "0xf4c32d51fc8d78cee2ac8b88c4ba0c3625e3a5ff67c38c13215f2d3cc8c0b6b3"
+dataSources:
+  - kind: substrate/Runtime
+    startBlock: 1
+    mapping:
+      file: ./dist/index.js
+      handlers:
+        - handler: handleBlock
+          kind: substrate/BlockHandler
+        - handler: handleEvent
+          kind: substrate/EventHandler
+        - handler: handleCall
+          kind: substrate/CallHandler
+        - handler: systemTokenTransferEvent
+          kind: substrate/EventHandler
+          filter:
+            module: balances
+            method: Transfer
